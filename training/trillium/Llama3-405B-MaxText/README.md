@@ -1,10 +1,10 @@
 # Instructions for training Llama3.1-405B-MaxText on TPU trillium
 
 ## XPK setup
-Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/training/trillium/XPK_README.md) to create your GKE cluster with XPK
+Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/XPK_README.md) to create your GKE cluster with XPK
 
 ## Prep for Maxtext 
-Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/training/trillium/MAXTEXT_README.md) to install maxtext and build docker image
+Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build docker image
 
 ## Run Maxtext Llama3.1-405B workloads on GKE
 

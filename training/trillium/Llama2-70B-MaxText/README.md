@@ -1,10 +1,10 @@
 # Instructions for training LLAMA2-70B-Maxtext on TPU trillium
 
 ## XPK setup
-Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/training/trillium/XPK_README.md) to create your GKE cluster with XPK
+Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/XPK_README.md) to create your GKE cluster with XPK
 
 ## Prep for Maxtext 
-Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/training/trillium/MAXTEXT_README.md) to install maxtext and build docker image
+Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build docker image
 
 ## Run Maxtext LLAMA2-70B workloads on GKE
 
@@ -13,7 +13,7 @@ jaxlib=0.4.35
 
 libtpu-nightly=20241028
 
-[maxtext](https://github.com/AI-Hypercomputer/maxtext.git)e7292a3a572792a0d797fc8977b21d0f255729f1
+[maxtext](https://github.com/AI-Hypercomputer/maxtext.git)@e7292a3a572792a0d797fc8977b21d0f255729f1
 
 ### Starting workload
 
