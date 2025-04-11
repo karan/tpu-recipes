@@ -33,12 +33,13 @@ Usage example:
 python benchmark_matmul.py \
   --dim 8192 8192 8192 \
   --libtpu_args=--xla_tpu_scoped_vmem_limit_kib=65536 \
-  --trace_matcher="jit_matmul.*"
+  --trace_matcher="jit_matmul.*" \
+  --clear_caches
 ```
 
 Example output:
 ```
-dtype: bfloat16, matrix dimensions: (8192, 8192, 8192), time taken (median, ms): 1.328756094, TFLOPS: 827.474382048629
+dtype: bfloat16, matrix dimensions: (8192, 8192, 8192), time taken (median, ms): 1.333586328, TFLOPS: 824.4772795661114
 ```
 
 The figure below shows the trace of the example above. Setting
@@ -76,12 +77,13 @@ Usage example:
 ```
 python benchmark_hbm.py \
   --num_elements=16777216 \
-  --trace_matcher="jit_my_copy.*"
+  --trace_matcher="jit_my_copy.*" \
+  --clear_caches
 ```
 
 Example output:
 ```
-Tensor size (bytes): 33554432, time taken (ms, median): 0.049359414, bandwidth (GBps, median): 1359.5960438266143
+Tensor size (bytes): 33554432, time taken (ms, median): 0.049333047, bandwidth (GBps, median): 1360.3227061973287 
 ```
 
 Run `python benchmark_hbm.py -h` to view the how to set the arguments.

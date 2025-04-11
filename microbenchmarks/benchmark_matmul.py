@@ -4,7 +4,8 @@ Sample usage (on TPU vm):
   $ python benchmark_matmul.py \
   --dim 8192 8192 8192 \
   --libtpu_args=--xla_tpu_scoped_vmem_limit_kib=65536 \
-  --trace_matcher="jit_matmul.*"
+  --trace_matcher="jit_matmul.*" \
+  --clear_caches
 """
 
 import argparse

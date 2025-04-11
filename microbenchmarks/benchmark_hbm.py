@@ -3,7 +3,8 @@ r"""Benchmark for HBM bandwidth.
 Sample usage (on TPU vm):
   $ python benchmark_hbm.py \
   --num_elements=16777216 \
-  --trace_matcher="jit_my_copy.*"
+  --trace_matcher="jit_my_copy.*" \
+  --clear_caches
 """
 
 import argparse
