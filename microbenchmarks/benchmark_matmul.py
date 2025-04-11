@@ -14,6 +14,8 @@ from typing import Any
 from benchmark_utils import run_bench
 import jax
 import jax.numpy as jnp
+import pandas as pd
+import sys
 
 
 def matmul(a, b):
@@ -116,6 +118,14 @@ def main():
           " staging caches."
       ),
   )
+  parser.add_argument(
+      "--output",
+      type=str,
+      required=False,
+      help=(
+          "write results to an output file."
+      ),
+  )
 
   args = parser.parse_args()
 
@@ -149,6 +159,18 @@ def main():
       f"dtype: {dtype.__name__}, matrix dimensions: ({m}, {n}, {k}), time taken"
       f" (median, ms): {result.time_median * 1e3}, TFLOPS: {tflops}"
   )
+
+  if args.output:
+    record = {
+      "dtype": dtype.__name__,
+      "dimensions": (m, n, k),
+      "time_median": result.time_median,
+      "tflops_median": tflops,
+    }
+    if os.path.exists(args.output):
+      pd.DataFrame([record]).to_csv(args.output, sep="\t", index=False, mode="a", header=False)
+    else:
+      pd.DataFrame([record]).to_csv(args.output, sep="\t", index=False)
 
 
 if __name__ == "__main__":
