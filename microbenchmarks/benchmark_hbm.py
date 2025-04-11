@@ -13,6 +13,9 @@ from typing import Any
 from benchmark_utils import run_bench
 import jax
 import jax.numpy as jnp
+import pandas as pd
+import sys
+from datetime import datetime
 
 
 def my_copy(a):
@@ -110,6 +113,14 @@ def main():
           " staging caches."
       ),
   )
+  parser.add_argument(
+      "--output",
+      type=str,
+      required=False,
+      help=(
+          "write results to an output file."
+      ),
+  )
 
   args = parser.parse_args()
 
@@ -140,6 +151,58 @@ def main():
       f"Tensor size (bytes): {tensor_size}, time taken (ms, median):"
       f" {result.time_median * 1000}, bandwidth (GBps, median): {bw_gbps} "
   )
+
+  if args.output:
+    record = {
+      "dtype": dtype.__name__,
+      "tensor_size_bytes": tensor_size,
+      "time_secs_median": result.time_median,
+      "bandwidth_gbps_median": bw_gbps,
+    }
+    if os.path.exists(args.output):
+      pd.DataFrame([record]).to_csv(args.output, sep="\t", index=False, mode="a", header=False)
+    else:
+      pd.DataFrame([record]).to_csv(args.output, sep="\t", index=False)
+    
+    # To be uploaded to DB
+    cmd = " ".join([v for v in sys.argv if not v.startswith("--output") and "/dev/null" not in v])
+    entry = {
+      "run_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
+      "workload_id": "hbm_single_chip",
+      "workload_parameters": {
+          "data_type": dtype.__name__,
+          "tensor_shape": [n],
+      },
+      "hardware_id": "v6e-1",
+      "hardware_num_chips": 1,
+      "hardware_num_nodes": 1,
+      "result_success": True,
+      "configs_num_iterations": args.num_iter,
+      "configs_other": {
+          "jax_version": "0.5.2",
+          "warmup_iter": args.warmup_iter,
+          "command": cmd,
+      },
+      "benchmarker_ldap": "chishuen",
+      "metrics_type": "bandwidth_top_level_xla_module" if args.trace_matcher else "bandwidth_on_host",
+      "metrics_unit": "giga_bytes_per_second",
+      "metrics_p50": bw_gbps,
+      "metrics_other": {"tensor_size_bytes": tensor_size},
+    }
+    if args.libtpu_args:
+      entry["configs_other"]["libtpu_init_args"] = args.libtpu_args
+    if args.clear_caches:
+      entry["configs_other"]["clear_caches"] = True
+
+    dirname = os.path.dirname(args.output)
+    basename = os.path.basename(args.output)
+    name, ext = os.path.splitext(basename)
+    new_name = f"{name}_db{ext}"
+    output_db = os.path.join(dirname, new_name)
+    if os.path.exists(output_db):
+      pd.DataFrame([entry]).to_csv(output_db, sep="\t", index=False, mode="a", header=False)
+    else:
+      pd.DataFrame([entry]).to_csv(output_db, sep="\t", index=False)
 
 
 if __name__ == "__main__":
