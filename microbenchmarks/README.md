@@ -4,12 +4,17 @@
 
 Set up a v6e TPU VM for single-chip microbenchmarks:
 ```
-gcloud compute tpus tpu-vm create ${TPU_NAME} /
-        --project ${PROJECT_ID} /
-        --zone=${ZONE} /
-        --accelerator-type=v6e-1 /
+export TPU_NAME=your-tpu-vm-name
+export PROJECT_ID=your-gcloud-project-name
+export ZONE=us-east5-b
+
+gcloud compute tpus tpu-vm create ${TPU_NAME} \
+        --project ${PROJECT_ID} \
+        --zone=${ZONE} \
+        --accelerator-type=v6e-1 \
         --version=v2-alpha-tpuv6e
 ```
+Replace the example values for `TPU_NAME`, `PROJECT_ID`, `ZONE` with your own. 
 If needed, see the full list of [available zones](https://cloud.google.com/tpu/docs/regions-zones).
 
 SSH into the VM:
